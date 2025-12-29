@@ -33,6 +33,20 @@ define Build/wax6xx-netgear-tar
 	rm -rf $@.tmp
 endef
 
+define Device/aliyun_xglink5g
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := Aliyun
+	DEVICE_MODEL := XGLINK 5G
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@hk09
+	SOC := ipq8072
+	DEVICE_PACKAGES := ipq-wifi-aliyun_xglink5g kmod-spi-gpio \
+		kmod-usb-serial-option uqmi
+endef
+TARGET_DEVICES += aliyun_xglink5g
+
 define Device/arcadyan_aw1000
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
