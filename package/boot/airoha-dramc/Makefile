@@ -7,7 +7,7 @@ PKG_NAME:=airoha-dramc
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://sirherobrine23.com.br/airoha/airoha_mips_dramc.git
+PKG_SOURCE_URL:=https://github.com/hdfla/airoha_mips_dramc.git
 
 PKG_SOURCE_DATE:=2026-09-29
 PKG_SOURCE_VERSION:=1fb0feaabab39299623cd2a035433a9126593fc1
@@ -57,6 +57,11 @@ AIROHA_MAKE_FLAGS = \
 define Build/Configure
 endef
 
+ifeq ($(filter $(SUBTARGET),en751221 en751627 en7528),)
+  Build/Compile   :=
+  Build/InstallDev :=
+else
+
 define Build/Compile
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(AIROHA_MAKE_FLAGS) \
@@ -79,6 +84,7 @@ define Build/InstallDev
 		$(AIROHA_OUT)/$(SUBTARGET)/bootext.bin \
 		$(STAGING_DIR_IMAGE)/$(SUBTARGET)_bootext.bin
 endef
+endif
 
 define Package/airoha-dramc/install
 endef
