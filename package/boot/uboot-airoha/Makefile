@@ -127,6 +127,18 @@ define U-Boot/en7523_mitrastar_gpt-2742gx4x5v6
 endef
 UBOOT_TARGETS += en7523_mitrastar_gpt-2742gx4x5v6
 
+define U-Boot/en7523_teleq_econet
+  NAME:=TELEQ XPON ECONET
+  UBOOT_IMAGE:=u-boot.bin
+  UBOOT_CONFIG:=en7523-teleq_econet
+  BUILD_SUBTARGET:=en7523
+  BUILD_DEVICES:=teleq_econet
+  BL2_IMAGE:=en7523-bl2.bin
+  BL31_IMAGE:=en7523-bl31.bin
+  DEPENDS:=+trusted-firmware-a-en7523-bl1 +trusted-firmware-a-en7523-bl2 +trusted-firmware-a-en7523-bl31
+endef
+UBOOT_TARGETS += en7523_teleq_econet
+
 define U-Boot/en7523_tplink_ex530v-v1
   NAME:=TP-Link ex530v v1
   UBOOT_IMAGE:=u-boot.bin
