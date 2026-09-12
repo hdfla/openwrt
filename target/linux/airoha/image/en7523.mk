@@ -132,6 +132,16 @@ define Device/mitrastar_gpt-2742gx4x5v6
 endef
 TARGET_DEVICES += mitrastar_gpt-2742gx4x5v6
 
+define Device/teleq_econet
+  $(Device/Uboot-FitImage)
+  DEVICE_VENDOR := TELEQ
+  DEVICE_MODEL := XPON ECONET
+  DEVICE_PACKAGES += kmod-usb-ohci kmod-usb2 \
+                     hostapd-mbedtls wpad-mbedtls wpa-supplicant-mbedtls htop \
+                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware
+endef
+TARGET_DEVICES += teleq_econet
+
 define Device/tplink_ex530v-v1
   $(Device/Uboot-FitImage)
   DEVICE_VENDOR := TP-Link

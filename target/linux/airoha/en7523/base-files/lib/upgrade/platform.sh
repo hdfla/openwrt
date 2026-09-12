@@ -111,6 +111,7 @@ platform_check_image() {
   genexis,rodimus_r1 |\
   genexis,zephyr |\
   mitrastar,gpt-2742gx4x5v6 |\
+  teleq,econet |\
   tplink,ex530v-v1 |\
   tplink,xx230v-v1)
     fit_check_image "$1"
