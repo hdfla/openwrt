@@ -174,7 +174,7 @@ endef
 define Download/atf-airoha
   SOURCE_DATE:=2026-09-07
   SOURCE_VERSION:=e3ad2bb0ed1632ce7b7cce426333112df4014603
-  URL:=https://sirherobrine23.com.br/airoha/atf-airoha.git
+  URL:=https://github.com/hdfla/atf-airoha.git
   PROTO:=git
   FILE:=atf-airoha-$$$$(subst -,.,$$$$(SOURCE_DATE))~$$$$(call version_abbrev,$$$$(SOURCE_VERSION)).tar.zst
   SUBDIR:=atf-airoha
