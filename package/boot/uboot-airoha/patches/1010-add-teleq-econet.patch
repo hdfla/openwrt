@@ -111,7 +111,7 @@ new file mode 100644
 index 00000000000..37f4b64c3a6
 --- /dev/null
 +++ b/defenvs/en7523-teleq-econet_env
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,31 @@
 +loadaddr=0x81800000
 +ipaddr=192.168.1.1
 +serverip=192.168.1.10
@@ -148,7 +148,7 @@ new file mode 100644
 index 00000000000..c1c4bd45e7d
 --- /dev/null
 +++ b/dts/upstream/src/arm/airoha/en7523-teleq-econet.dts
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,131 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +/dts-v1/;
 +
