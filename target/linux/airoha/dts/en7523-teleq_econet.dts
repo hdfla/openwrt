@@ -49,7 +49,7 @@
 //			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
 //			debounce-interval = <60>;
 //		}; 
-//	};
+	};
 
 	leds {
 		compatible = "gpio-leds";
@@ -116,7 +116,7 @@
 //			function-enumerator = <8>;
 //			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
 //		};
-//
+
 //		// WPS
 //		led@9 {
 //			color = <LED_COLOR_ID_GREEN>;
