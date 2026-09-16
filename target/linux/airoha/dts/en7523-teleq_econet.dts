@@ -42,15 +42,14 @@
 			debounce-interval = <60>;
 		};
 		
-/* TO BE DEFINED
-		wifi {
-			label = "wifi";
-			linux,code = <KEY_WIFI_BUTTON>;
-			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
-			debounce-interval = <60>;
-		}; 
-	};
-*/
+// TO BE DEFINED
+//		wifi {
+//			label = "wifi";
+//			linux,code = <KEY_WIFI_BUTTON>;
+//			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
+//			debounce-interval = <60>;
+//		}; 
+//	};
 
 	leds {
 		compatible = "gpio-leds";
@@ -109,23 +108,22 @@
 			gpios = <&pinctrl 25 GPIO_ACTIVE_LOW>;
 		};
 
-/* TO BE DEFINED
-		// Wireless
-		led@8 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_WLAN;
-			function-enumerator = <8>;
-			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
-		};
+// TO BE DEFINED
+//		// Wireless
+//		led@8 {
+//			color = <LED_COLOR_ID_GREEN>;
+//			function = LED_FUNCTION_WLAN;
+//			function-enumerator = <8>;
+//			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
+//		};
 
-		// WPS
-		led@9 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <9>;
-			gpios = <&pinctrl x GPIO_ACTIVE_HIGH>;
-		};
-*/
+//		// WPS
+//		led@9 {
+//			color = <LED_COLOR_ID_GREEN>;
+//			function = LED_FUNCTION_STATUS;
+//			function-enumerator = <9>;
+//			gpios = <&pinctrl x GPIO_ACTIVE_HIGH>;
+//		};
 
 		// LOS
 		los: led@2 {
