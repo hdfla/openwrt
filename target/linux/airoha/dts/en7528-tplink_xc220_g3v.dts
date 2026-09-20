@@ -156,10 +156,6 @@ model = "TP-Link xc220 g3v";
 						reg = <0x10000 0xff>;
 					};
 
-					gponsn: gponsn@40001 {
-						reg = <0x40001 0x10>;
-					};
-
 					eeprom2_4: eeprom@60000 {
 						reg = <0x60000 0x200>;
 					};
@@ -173,6 +169,39 @@ model = "TP-Link xc220 g3v";
 	};
 };
 
+&pcm0 {
+	/* Single FXS line (only "FXS1" is wired out on this board) -- channel 0 only. */
+	airoha,dma-channel-mask = <0x01>;
+	status = "okay";
+};
+
+/*
+ * ISI multiplexes the SLIC control channel onto the PCM pins, not the
+ * flash-shared &spi bus. No reset-gpios here: this board's vendor
+ * firmware (type=ISI slic=si32192) never assigns a discrete SLIC reset
+ * GPIO -- confirmed from the real compiled spi.ko (CSI_reset_gpio == 2,
+ * the "no discrete GPIO" case) plus MediaTek's own slic_adaptor_s.c,
+ * whose Silicon Labs reset path is purely PCLK/FSYNC-sequenced ("Reset
+ * C"). Reset is handled by en75xx_isi_spi_hw_init()'s own reset-controller
+ * pulse instead.
+ */
+&isi0 {
+	status = "okay";
+
+	proslic0: proslic@0 {
+		compatible = "silabs,si32192";
+		reg = <0>;
+		spi-max-frequency = <10000000>;
+		spi-cpha;
+		spi-cpol;
+
+		airoha,pcm = <&pcm0>;
+		airoha,pcm-channel = <0>;
+
+		status = "okay";
+	};
+};
+
 &pcie0 {
 	status = "okay";
 };
@@ -182,24 +211,30 @@ model = "TP-Link xc220 g3v";
 };
 
 &slot0 {
+	status = "okay";
+
 	wifi@0,0 {
 		/* 2,4 GHz: MT7592/MT7603 */
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
 
-		nvmem-cells = <&eeprom2_4>, <&macaddr 1>;
-		nvmem-cell-names = "eeprom", "mac-address";
+		nvmem-cells = <&macaddr 1>, <&eeprom2_4>;
+		nvmem-cell-names = "mac-address", "eeprom";
+		ieee80211-freq-limit = <2400000 2500000>;
 	};
 };
 
 &slot1 {
+	status = "okay";
+
 	wifi@0,0 {
 		/* Dual-band/5 GHz: MT7663 */
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
 
-		nvmem-cells = <&eeprom5>, <&macaddr 2>;
-		nvmem-cell-names = "eeprom", "mac-address";
+		nvmem-cells = <&macaddr 2>, <&eeprom5>;
+		nvmem-cell-names = "mac-address", "eeprom";
+		ieee80211-freq-limit = <5000000 6000000>;
 	};
 };
 
@@ -225,8 +260,8 @@ model = "TP-Link xc220 g3v";
 &xpon {
 	status = "okay";
 
-	nvmem-cells = <&gponsn>;
-	nvmem-cell-names = "gpon-serial-number";
+	airoha,gpon-serial-from-mac;
+	omci-vendor-id = "TPLG";
 
 	optical-frontends = <&en7571>;
 	optical-frontend-names = "pon";
