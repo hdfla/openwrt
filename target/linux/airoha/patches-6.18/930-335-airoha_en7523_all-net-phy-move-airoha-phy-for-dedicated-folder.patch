@@ -1,4 +1,4 @@
-From 51cf8a9d2e21cbec98f52b518dea307934a11ebf Mon Sep 17 00:00:00 2001
+From d86f24dc9437e82cd9f249df28a7f6b2be95e6f3 Mon Sep 17 00:00:00 2001
 From: Matheus Sampaio Queiroga <srherobrine20@gmail.com>
 Date: Sat, 5 Sep 2026 18:35:17 -0300
 Subject: [PATCH] net: phy: move airoha phy for dedicated folder
