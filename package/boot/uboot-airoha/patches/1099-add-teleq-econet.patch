@@ -5,20 +5,20 @@ Subject: [PATCH] add teleq xpon econet
 
 Signed-off-by: Matheus Sampaio Queiroga <srherobrine20@gmail.com>
 ---
- configs/en7523-teleq_econet_defconfig     |  87 ++++++++++++
- defenvs/en7523-teleq-econet_env           |  33 +++++
- .../arm/airoha/en7523-teleq-econet.dts    | 125 ++++++++++++++++++
- 3 files changed, 245 insertions(+)
+ configs/en7523-teleq_econet_defconfig     |  88 ++++++++++++
+ defenvs/en7523-teleq_econet_env           |  37 +++++
+ .../arm/airoha/en7523-teleq_econet.dts    | 126 ++++++++++++++++++
+ 3 files changed, 251 insertions(+)
  create mode 100644 configs/en7523-teleq_econet_defconfig
- create mode 100644 defenvs/en7523-teleq-econet_env
- create mode 100644 dts/upstream/src/arm/airoha/en7523-teleq-econet.dts
+ create mode 100644 defenvs/en7523-teleq_econet_env
+ create mode 100644 dts/upstream/src/arm/airoha/en7523-teleq_econet.dts
 
 diff --git a/configs/en7523-teleq_econet_defconfig b/configs/en7523-teleq_econet_defconfig
 new file mode 100644
 index 00000000000..53a640b548e
 --- /dev/null
 +++ b/configs/en7523-teleq_econet_defconfig
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,88 @@
 +CONFIG_ARM=y
 +CONFIG_POSITION_INDEPENDENT=y
 +CONFIG_GIC_V3_ITS=y
@@ -27,16 +27,16 @@ index 00000000000..53a640b548e
 +CONFIG_TEXT_BASE=0x81E00000
 +CONFIG_SYS_MALLOC_F_LEN=0x4000
 +CONFIG_NR_DRAM_BANKS=1
-+CONFIG_ENV_SIZE=0x4000
++CONFIG_ENV_SIZE=0x40000
 +CONFIG_DM_GPIO=y
-+CONFIG_DEFAULT_DEVICE_TREE="airoha/en7523-teleq-econet"
++CONFIG_DEFAULT_DEVICE_TREE="airoha/en7523-teleq_econet"
 +CONFIG_SYS_BOOTM_LEN=0x460000000
 +CONFIG_SYS_LOAD_ADDR=0x81800000
 +CONFIG_BUILD_TARGET="u-boot.bin"
 +CONFIG_FIT=y
 +CONFIG_FIT_VERBOSE=y
 +CONFIG_BOOTDELAY=3
-+CONFIG_DEFAULT_FDT_FILE="en7523-teleq-econet"
++CONFIG_DEFAULT_FDT_FILE="en7523-teleq_econet"
 +CONFIG_SYS_PBSIZE=1049
 +CONFIG_SYS_CONSOLE_IS_IN_ENV=y
 +CONFIG_HUSH_PARSER=y
@@ -47,6 +47,7 @@ index 00000000000..53a640b548e
 +# CONFIG_CMD_ELF is not set
 +# CONFIG_CMD_XIMG is not set
 +CONFIG_CMD_BIND=y
++CONFIG_CMD_BIN2MAC=y
 +CONFIG_CMD_GPIO=y
 +CONFIG_CMD_MTD=y
 +CONFIG_CMD_PART=y
@@ -69,7 +70,7 @@ index 00000000000..53a640b548e
 +CONFIG_ENV_UBI_VOLUME_REDUND="ubootenv2"
 +CONFIG_ENV_RELOC_GD_ENV_ADDR=y
 +CONFIG_ENV_USE_DEFAULT_ENV_TEXT_FILE=y
-+CONFIG_ENV_DEFAULT_ENV_TEXT_FILE="defenvs/en7523-teleq-econet_env"
++CONFIG_ENV_DEFAULT_ENV_TEXT_FILE="defenvs/en7523-teleq_econet_env"
 +CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
 +CONFIG_IPV6=y
 +CONFIG_NET_RANDOM_ETHADDR=y
@@ -106,32 +107,37 @@ index 00000000000..53a640b548e
 +CONFIG_SHA512=y
 +CONFIG_LZMA=y
 +# CONFIG_VPL_LZMA is not set
-diff --git a/defenvs/en7523-teleq-econet_env b/defenvs/en7523-teleq-econet_env
+diff --git a/defenvs/en7523-teleq_econet_env b/defenvs/en7523-teleq_econet_env
 new file mode 100644
 index 00000000000..37f4b64c3a6
 --- /dev/null
-+++ b/defenvs/en7523-teleq-econet_env
-@@ -0,0 +1,31 @@
-+loadaddr=0x81800000
++++ b/defenvs/en7523-teleq_econet_env
+@@ -0,0 +1,37 @@
++loadaddr=0x89400000
 +ipaddr=192.168.1.1
 +serverip=192.168.1.10
 +bootled_pwr=green:power
 +
 +bootconf=config-1
 +bootfile=openwrt-airoha-en7523-teleq_econet-initramfs-kernel.bin
++bootloaderfile=openwrt-airoha-en7523-teleq_econet-tcboot.bin
 +
 +boot_tftp=tftpboot $loadaddr $bootfile && bootm $loadaddr#$bootconf
 +ubi_read_openwrt=ubi read $loadaddr fit && iminfo $loadaddr
 +
-+boot_openwrt=led $bootled_pwr on ; run ubi_read_openwrt && bootm $loadaddr#$bootconf ; led $bootled_pwr off
++boot_openwrt=led $bootled_pwr blink 255; run ubi_read_openwrt && bootm $loadaddr#$bootconf ; led $bootled_pwr on ; echo Install openwrt ; run boot_tftp
 +boot_ubi=ubi part ubi && run boot_openwrt
 +
-+format_ubi_part=mtd read spi-nand0 $loadaddr 0xa0000 $art_size && \
++upgrade_uboot=\
++  mw.b 0x89600000 0xff 0x100000 && tftpboot 0x89600000 ${bootloaderfile} && \
++  mtd erase u-boot && mtd write u-boot 0x89600000
++
++format_ubi_part=mtd read spi-nand0 $loadaddr 0x6dc0000 $art_size && \
 +  mtd erase ubi && ubi part ubi && \
-+  ubi create ubootenv 0x1f000 && ubi create ubootenv2 0x1f000 && \
++  ubi create ubootenv 0x40000 static && ubi create ubootenv2 0x40000 static && \
 +  ubi create art $art_size && ubi write $loadaddr art $art_size
 +
-+econet_ubi_part=setenv art_size 0x240000 && run format_ubi_part
++teleq_ubi_part=setenv art_size 0x240000 && run format_ubi_part
 +
 +bootcmd=run boot_ubi
 +bootdelay=3
@@ -141,14 +147,15 @@ index 00000000000..37f4b64c3a6
 +bootmenu_title=      34m( ( ( mOpenWrt34m ) ) )
 +bootmenu_0=Run default boot command.=run boot_openwrt
 +bootmenu_1=Boot system via TFTP.=run boot_tftp ; run bootmenu_confirm_return
-+bootmenu_2=Format UBI partition for econet.=run econet_ubi_part
++bootmenu_2=Format UBI partition for TELEQ XPON.=run teleq_ubi_part
++bootmenu_3=Upgrade tcboot.=run upgrade_uboot
 +bootmenu_5=Reboot.=reset
-diff --git a/dts/upstream/src/arm/airoha/en7523-teleq-econet.dts b/dts/upstream/src/arm/airoha/en7523-teleq-econet.dts
+diff --git a/dts/upstream/src/arm/airoha/en7523-teleq_econet.dts b/dts/upstream/src/arm/airoha/en7523-teleq_econet.dts
 new file mode 100644
 index 00000000000..c1c4bd45e7d
 --- /dev/null
-+++ b/dts/upstream/src/arm/airoha/en7523-teleq-econet.dts
-@@ -0,0 +1,131 @@
++++ b/dts/upstream/src/arm/airoha/en7523-teleq_econet.dts
+@@ -0,0 +1,126 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +/dts-v1/;
 +
@@ -160,7 +167,7 @@ index 00000000000..c1c4bd45e7d
 +
 +/ {
 +	model = "TELEQ XPON ECONET";
-+	compatible = "airoha,en7523-teleq-econet", "airoha,en7523";
++	compatible = "airoha,en7523-teleq_econet", "airoha,en7523";
 +
 +	aliases {
 +		serial0 = &uart1;
@@ -170,11 +177,6 @@ index 00000000000..c1c4bd45e7d
 +		bootargs = "console=ttyS0,115200 earlycon";
 +		stdout-path = "serial0:115200n8";
 +		linux,usable-memory-range = <0x80200000 0x1fe00000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
 +	};
 +
 +	keys {
@@ -276,10 +278,9 @@ index 00000000000..c1c4bd45e7d
 +
 +		partition@100000 {
 +			label = "ubi";
-+			reg = <0x00100000 0x08000000>;
++			reg = <0x00100000 0x00000000>;
 +		};
 +	};
 +};
 -- 
 2.55.0
-

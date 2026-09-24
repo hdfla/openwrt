@@ -138,20 +138,26 @@
 
 /*
 Old maping NAND
-
 	0x000000000000-0x000000080000 : "bootloader"
 	0x000000080000-0x0000000c0000 : "romfile"
+	---
+	0x000006dc0000-0x000007000000 : "reservearea" (0x240000)
+4-digits:
 	0x0000000c0000-0x000001ec0000 : "tclinux"
 	0x000001ec0000-0x000003cc0000 : "tclinux_slave"
 	0x000003cc0000-0x000003dc0000 : "config"
 	0x000003dc0000-0x0000047c0000 : "userdata"
-	0x000006dc0000-0x000007000000 : "reservearea" (0x240000)
+7-digits:
+	0x0000000c0000-0x0000028c0000 : "tclinux"
+	0x0000028c0000-0x0000050c0000 : "tclinux_slave"
+	0x0000050c0000-0x0000064c0000 : "data"
+	0x0000064c0000-0x0000066c0000 : "config"
 
 	---------------------------------------------------------------------
 
 New Maping:
 	0x00000000-0x00100000 : BL1 + FIP (BL2 + BL31 + BL33)
-	0x00100000-0x00000000 : UBI (uboot env{1,2} + ART (reservearea part) + fit (firmware))
+	0x00100000-0x00000000 : UBI (uboot env{1,2} + art(reservearea) + fit (firmware))
 */
 
 &spi0 {
@@ -207,12 +213,12 @@ New Maping:
 								#nvmem-cell-cells = <1>;
 							};
 
-							eeprom: eeprom@4c000 {
-								reg = <0x4c000 0x1000>;
+							eeprom: eeprom@80000 {
+								reg = <0x80000 0x1000>;
 							};
 
-							en7571_bob: en7571_bob@140497 {
-								reg = <0x140497 0xff>;
+							en7571_bob: en7571_bob@c0000 {
+								reg = <0xc0000 0xff>;
 							};
 						};
 					};
@@ -282,7 +288,6 @@ New Maping:
 
 		nvmem-cells = <&en7571_bob>;
 		nvmem-cell-names = "calibration";
-		tx-disable-gpios = <&pinctrl 16 GPIO_ACTIVE_HIGH>;
 
 		#optical-frontend-cells = <0>;
 	};
@@ -368,4 +373,24 @@ New Maping:
 
 &gsw_phy4 {
 	status = "okay";
+};
+
+&gsw_phy1_led0 {
+	status = "okay";
+	color = <LED_COLOR_ID_GREEN>;
+};
+
+&gsw_phy2_led0 {
+	status = "okay";
+	color = <LED_COLOR_ID_GREEN>;
+};
+
+&gsw_phy3_led0 {
+	status = "okay";
+	color = <LED_COLOR_ID_GREEN>;
+};
+
+&gsw_phy4_led0 {
+	status = "okay";
+	color = <LED_COLOR_ID_GREEN>;
 };
