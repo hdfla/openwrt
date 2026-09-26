@@ -317,7 +317,7 @@ New Maping:
 	status = "okay";
 	phy-mode = "internal";
 
-	nvmem-cells = <&ubootenv_ethaddr 3>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 
 	/delete-property/ pcs-handle;
