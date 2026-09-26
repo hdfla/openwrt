@@ -239,10 +239,14 @@ New Maping:
 
 &pcie0 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &pcie1 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 
 	pcie@1,0 {
 		reg = <0x00000800 0 0 0 0>;
