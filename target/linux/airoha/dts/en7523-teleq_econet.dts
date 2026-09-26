@@ -80,32 +80,28 @@
 
 		// LAN
 		led@4 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <4>;
+			label = "green:lan-4";
 			gpios = <&pinctrl 22 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 		led@5 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <5>;
+			label = "green:lan-5";
 			gpios = <&pinctrl 23 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 		led@6 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <6>;
+			label = "green:lan-6";
 			gpios = <&pinctrl 24 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 
 		led@7 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <7>;
+			label = "green:lan-7";
 			gpios = <&pinctrl 25 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 // TO BE DEFINED
@@ -176,6 +172,7 @@ New Maping:
 			partition@0 {
 				label = "u-boot";
 				reg = <0x000000 0x100000>;
+				read-only;
 			};
 
 			partition@100000 {
@@ -371,36 +368,40 @@ New Maping:
 
 &gsw_phy1 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &gsw_phy2 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &gsw_phy3 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &gsw_phy4 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &gsw_phy1_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy2_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy3_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy4_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
