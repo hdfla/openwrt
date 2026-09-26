@@ -192,6 +192,9 @@ New Maping:
 						volname = "ubootenv2";
 						nvmem-layout {
 							compatible = "u-boot,env-redundant-bool";
+
+							ubootenv_ethaddr: ethaddr {
+								#nvmem-cell-cells = <1>;
 						};
 					};
 
@@ -203,12 +206,6 @@ New Maping:
 							compatible = "fixed-layout";
 							#address-cells = <1>;
 							#size-cells = <1>;
-
-							macaddr: macaddr@4f100 {
-								compatible = "mac-base";
-								reg = <0x4f100 0x6>;
-								#nvmem-cell-cells = <1>;
-							};
 
 							eeprom: eeprom@4c000 {
 								reg = <0x4c000 0x1000>;
@@ -268,14 +265,14 @@ New Maping:
 			// 2.4 GHz
 			band@0 {
 				reg = <0>;
-				nvmem-cells = <&macaddr 0>;
+				nvmem-cells = <&ubootenv_ethaddr 1>;
 				nvmem-cell-names = "mac-address";
 			};
 
 			// 5 GHz
 			band@1 {
 				reg = <1>;
-				nvmem-cells = <&macaddr 2>;
+				nvmem-cells = <&ubootenv_ethaddr 2>;
 				nvmem-cell-names = "mac-address";
 			};
 		};
@@ -320,7 +317,7 @@ New Maping:
 	status = "okay";
 	phy-mode = "internal";
 
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 3>;
 	nvmem-cell-names = "mac-address";
 
 	/delete-property/ pcs-handle;
@@ -333,7 +330,7 @@ New Maping:
 
 &gdm1 {
 	status = "okay";
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 };
 
@@ -362,7 +359,7 @@ New Maping:
 };
 
 &gsw_port6 {
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 };
 
