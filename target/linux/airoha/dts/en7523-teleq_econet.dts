@@ -213,12 +213,12 @@ New Maping:
 								#nvmem-cell-cells = <1>;
 							};
 
-							eeprom: eeprom@80000 {
-								reg = <0x80000 0x1000>;
+							eeprom: eeprom@4c000 {
+								reg = <0x4c000 0x1000>;
 							};
 
-							en7571_bob: en7571_bob@c0000 {
-								reg = <0xc0000 0xff>;
+							en7571_bob: en7571_bob@140497 {
+								reg = <0x140497 0xff>;
 							};
 						};
 					};
@@ -231,6 +231,12 @@ New Maping:
 			};
 		};
 	};
+};
+
+&npu {
+	firmware-name = "airoha/en7523_7916_npu_rv32.bin",
+			"airoha/en7523_7916_npu_data.bin";
+	status = "okay";
 };
 
 &usb0 {
