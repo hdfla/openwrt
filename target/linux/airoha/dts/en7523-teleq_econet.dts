@@ -80,32 +80,28 @@
 
 		// LAN
 		led@4 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <4>;
+			label = "green:lan1";
 			gpios = <&pinctrl 22 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 		led@5 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <5>;
+			label = "green:lan2";
 			gpios = <&pinctrl 23 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 		led@6 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <6>;
+			label = "green:lan3";
 			gpios = <&pinctrl 24 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 
 		led@7 {
-			color = <LED_COLOR_ID_GREEN>;
-			function = LED_FUNCTION_STATUS;
-			function-enumerator = <7>;
+			label = "green:lan4";
 			gpios = <&pinctrl 25 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 
 // TO BE DEFINED
@@ -176,6 +172,7 @@ New Maping:
 			partition@0 {
 				label = "u-boot";
 				reg = <0x000000 0x100000>;
+				read-only;
 			};
 
 			partition@100000 {
@@ -195,6 +192,10 @@ New Maping:
 						volname = "ubootenv2";
 						nvmem-layout {
 							compatible = "u-boot,env-redundant-bool";
+
+							ubootenv_ethaddr: ethaddr {
+								#nvmem-cell-cells = <1>;
+							};
 						};
 					};
 
@@ -207,30 +208,30 @@ New Maping:
 							#address-cells = <1>;
 							#size-cells = <1>;
 
-							macaddr: macaddr@4f100 {
-								compatible = "mac-base";
-								reg = <0x4f100 0x6>;
-								#nvmem-cell-cells = <1>;
+							eeprom: eeprom@4c000 {
+								reg = <0x4c000 0x1000>;
 							};
 
-							eeprom: eeprom@80000 {
-								reg = <0x80000 0x1000>;
-							};
-
-							en7571_bob: en7571_bob@c0000 {
-								reg = <0xc0000 0xff>;
+							en7571_bob: en7571_bob@140497 {
+								reg = <0x140497 0xff>;
 							};
 						};
 					};
 
 					firmware: ubi-volume-firmware {
 						volname = "fit";
-						compatible = "denx,uimage";
+						compatible = "denx,fit-image";
 					};
 				};
 			};
 		};
 	};
+};
+
+&npu {
+	firmware-name = "airoha/en7523_7916_npu_rv32.bin",
+			"airoha/en7523_7916_npu_data.bin";
+	status = "okay";
 };
 
 &usb0 {
@@ -239,10 +240,14 @@ New Maping:
 
 &pcie0 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 };
 
 &pcie1 {
 	status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
 
 	pcie@1,0 {
 		reg = <0x00000800 0 0 0 0>;
@@ -261,14 +266,14 @@ New Maping:
 			// 2.4 GHz
 			band@0 {
 				reg = <0>;
-				nvmem-cells = <&macaddr 0>;
+				nvmem-cells = <&ubootenv_ethaddr 1>;
 				nvmem-cell-names = "mac-address";
 			};
 
 			// 5 GHz
 			band@1 {
 				reg = <1>;
-				nvmem-cells = <&macaddr 2>;
+				nvmem-cells = <&ubootenv_ethaddr 2>;
 				nvmem-cell-names = "mac-address";
 			};
 		};
@@ -313,7 +318,7 @@ New Maping:
 	status = "okay";
 	phy-mode = "internal";
 
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 
 	/delete-property/ pcs-handle;
@@ -326,7 +331,7 @@ New Maping:
 
 &gdm1 {
 	status = "okay";
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 };
 
@@ -355,7 +360,7 @@ New Maping:
 };
 
 &gsw_port6 {
-	nvmem-cells = <&macaddr 0>;
+	nvmem-cells = <&ubootenv_ethaddr 0>;
 	nvmem-cell-names = "mac-address";
 };
 
@@ -376,21 +381,17 @@ New Maping:
 };
 
 &gsw_phy1_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy2_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy3_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
 
 &gsw_phy4_led0 {
-	status = "okay";
-	color = <LED_COLOR_ID_GREEN>;
+	status = "disabled";
 };
