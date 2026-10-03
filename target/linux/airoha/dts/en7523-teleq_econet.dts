@@ -104,17 +104,8 @@
 			default-state = "off";
 		};
 
-// TO BE DEFINED
-//		// Wireless
-//		led@8 {
-//			color = <LED_COLOR_ID_GREEN>;
-//			function = LED_FUNCTION_WLAN;
-//			function-enumerator = <8>;
-//			gpios = <&pinctrl x GPIO_ACTIVE_LOW>;
-//		};
-
 //		// WPS
-//		led@9 {
+//		led@8 {
 //			color = <LED_COLOR_ID_GREEN>;
 //			function = LED_FUNCTION_STATUS;
 //			function-enumerator = <9>;
@@ -229,8 +220,8 @@ New Maping:
 };
 
 &npu {
-	firmware-name = "airoha/en7523_7916_npu_rv32.bin",
-			"airoha/en7523_7916_npu_data.bin";
+	firmware-name = "airoha/en7523_teleq_npu_rv32.bin",
+			"airoha/en7523_teleq_npu_data.bin";
 	status = "okay";
 };
 
