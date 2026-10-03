@@ -93,7 +93,7 @@
 +
 +static const struct mtd_ooblayout_ops hyf1gq4_ooblayout = {
 +	.ecc = hyf1gq4_ooblayout_ecc,
-+	.free = hyf1gq4_ooblayout_free,
++	.rfree = hyf1gq4_ooblayout_free,
 +};
 +
 +static int hyf1gq4_ecc_get_status(struct spinand_device *spinand, u8 status)
