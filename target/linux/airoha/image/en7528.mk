@@ -32,7 +32,7 @@ endef
 TARGET_DEVICES += dasan_h660gm-a-generic
 
 define Device/tplink_xc220-g3v
-  $(Device/FitImageVmlinuz)
+  $(Device/FitVmlinux)
   $(Device/EconetBootUboot)
   DEVICE_VENDOR := TP-Link
   DEVICE_MODEL := XC220

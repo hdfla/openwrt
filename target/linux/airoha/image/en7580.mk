@@ -1,7 +1,7 @@
 TRX_ENDIAN := le
 
 define Device/quantum_c6500xk-v1
-  $(Device/FitImageVmlinuz)
+  $(Device/FitVmlinux)
   DEVICE_VENDOR := Quantum
   DEVICE_MODEL := C6500XK
   DEVICE_VARIANT := 1.0

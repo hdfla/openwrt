@@ -58,7 +58,7 @@ define Device/FitImage
   KERNEL_NAME := Image
   KERNEL = kernel-bin | gzip | \
     fit gzip $$(KDIR)/image-$$(DEVICE_DTS).dtb
-    KERNEL_INITRAMFS = kernel-bin | gzip | \
+  KERNEL_INITRAMFS = kernel-bin | gzip | \
     fit gzip $$(KDIR)/image-$$(DEVICE_DTS).dtb
 endef
 
@@ -69,11 +69,12 @@ define Device/FitImageLzma
     fit lzma $$(KDIR)/image-$$(DEVICE_DTS).dtb
 endef
 
-define Device/FitImageVmlinuz
-  KERNEL_NAME := vmlinuz.bin
-  KERNEL = kernel-bin | \
+define Device/FitVmlinux
+	KERNEL_NAME := vmlinux
+  KERNEL_LOADADDR := 0x82000000
+  KERNEL := kernel-bin | \
     fit none $$(KDIR)/image-$$(DEVICE_DTS).dtb
-  KERNEL_INITRAMFS = kernel-bin | \
+  KERNEL_INITRAMFS := kernel-bin | \
     fit none $$(KDIR)/image-$$(DEVICE_DTS).dtb
 endef
 

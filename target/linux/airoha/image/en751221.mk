@@ -93,7 +93,7 @@ endef
 TARGET_DEVICES += huawei_hg2821t-u
 
 define Device/mitrarstar_gpt-2741gnac-n1
-  $(Device/FitImageVmlinuz)
+  $(Device/FitVmlinux)
   DEVICE_VENDOR := Mitrastar
   DEVICE_MODEL := GPT-2741GNAC-N1
   DEVICE_DTS := en751221-mitrarstar_gpt-2741gnac-n1
@@ -102,7 +102,7 @@ endef
 TARGET_DEVICES += mitrarstar_gpt-2741gnac-n1
 
 define Device/nokia_g240g-e
-  $(Device/FitImageVmlinuz)
+  $(Device/FitVmlinux)
   $(Device/EconetBootUboot)
   DEVICE_VENDOR := Nokia
   DEVICE_MODEL := G-240G-E
@@ -150,7 +150,7 @@ TARGET_DEVICES += tplink_archer-vr1200v-v2
 # appended DTB: an appended DTB would win over the one U-Boot passes, and
 # only the latter carries chosen/u-boot,version, which fitblk needs.
 define Device/tplink_archer-xr500v-v1
-  $(Device/FitImageVmlinuz)
+  $(Device/FitVmlinux)
   $(Device/EconetBootUboot)
   DEVICE_VENDOR := TP-Link
   DEVICE_MODEL := Archer XR500v

@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 BOARD:=airoha
-BOARDNAME:=Airoha / Econet
-SUBTARGETS:=en7523 an7581 an7583 en751221 en751627 en7528 en7580
+BOARDNAME:=Airoha
+SUBTARGETS:=en751221 en751627 en7528 en7580 en7523 an7581 an7583
 FEATURES:=dt squashfs nand ramdisk gpio
 
 KERNEL_PATCHVER:=6.18
