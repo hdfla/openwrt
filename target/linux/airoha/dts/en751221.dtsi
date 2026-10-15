@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-#include <dt-bindings/reset/econet,en751221-scu.h>
 #include <dt-bindings/clock/econet,en751221-scu.h>
+
+#include <dt-bindings/reset/econet,en751221-scu.h>
 #include <dt-bindings/leds/common.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
@@ -63,15 +64,6 @@
 		clock-names = "spi";
 		#address-cells = <1>;
 		#size-cells = <0>;
-
-		nand: nand@0 {
-			compatible = "spi-nand";
-			reg = <0>;
-			spi-max-frequency = <25000000>;
-			spi-rx-bus-width = <2>;
-			spi-tx-bus-width = <1>;
-			nand-ecc-engine = <&nand>;
-		};
 	};
 
 	pcie_phy1: pcie-phy@1fac0000 {
@@ -105,6 +97,17 @@
 		interrupt-parent = <&intc>;
 		interrupts = <30>;
 		clocks = <&hpt_clock>;
+	};
+
+
+
+
+
+	dramc: memory-controller@1fb20000 {
+		compatible = "econet,en751221-dramc";
+		reg = <0x1fb20000 0x1000>;
+		reg-names = "dramc";
+		airoha,scu = <&scuclk>;
 	};
 
 	chip_scu: syscon@1fa20000 {
@@ -297,8 +300,9 @@
 		clock-frequency = <1843200>;
 	};
 
-	system-controller@1fbf0200 {
-		compatible = "syscon", "simple-mfd";
+	gpio_syscon: system-controller@1fbf0200 {
+		compatible = "econet,en751221-gpio-sysctl", "syscon",
+			     "simple-mfd";
 		reg = <0x1fbf0200 0xc0>;
 
 		pinctrl: pinctrl {

@@ -10,6 +10,6 @@ define Device/quantum_c6500xk-v1
   DEVICE_ALT0_MODEL := C6500XK
   DEVICE_ALT0_VARIANT := 1.0
 
-  DEVICE_PACKAGES += omci-agent kmod-phy-aquantia
+  DEVICE_PACKAGES += kmod-phy-aquantia airoha-en7573-firmware
 endef
 TARGET_DEVICES += quantum_c6500xk-v1

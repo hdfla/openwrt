@@ -15,7 +15,8 @@ define Device/askey_rtf8225vw
   DEVICE_VENDOR := Askey
   DEVICE_MODEL := RTF8225VW
   DEVICE_PACKAGES += hostapd-mbedtls wpad-mbedtls wpa-supplicant-mbedtls \
-                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware
+                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware \
+                     airoha-en7571-firmware
 endef
 TARGET_DEVICES += askey_rtf8225vw
 
@@ -128,7 +129,8 @@ define Device/mitrastar_gpt-2742gx4x5v6
   DEVICE_VENDOR := MitraStar
   DEVICE_MODEL := GPT-2742GX4X5v6
   DEVICE_PACKAGES += hostapd-mbedtls wpad-mbedtls wpa-supplicant-mbedtls \
-                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware
+                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware \
+                     airoha-en7571-firmware
 endef
 TARGET_DEVICES += mitrastar_gpt-2742gx4x5v6
 
@@ -153,6 +155,7 @@ define Device/tplink_xx230v-v1
   DEVICE_ALT0_VARIANT := v1
   DEVICE_PACKAGES += kmod-usb-ohci kmod-usb2 \
                      hostapd-mbedtls wpad-mbedtls wpa-supplicant-mbedtls \
-                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware
+                     kmod-mt7915e kmod-mt7915-firmware kmod-mt7916-firmware \
+                     airoha-en7571-firmware
 endef
 TARGET_DEVICES += tplink_xx230v-v1

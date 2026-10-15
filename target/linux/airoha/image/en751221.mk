@@ -97,6 +97,7 @@ define Device/mitrarstar_gpt-2741gnac-n1
   DEVICE_VENDOR := Mitrastar
   DEVICE_MODEL := GPT-2741GNAC-N1
   DEVICE_DTS := en751221-mitrarstar_gpt-2741gnac-n1
+  DEVICE_PACKAGES := kmod-usb3 semtech-gn25l96-firmware semtech-gn25l98-firmware
 endef
 TARGET_DEVICES += mitrarstar_gpt-2741gnac-n1
 
@@ -106,7 +107,7 @@ define Device/nokia_g240g-e
   DEVICE_VENDOR := Nokia
   DEVICE_MODEL := G-240G-E
   DEVICE_DTS := en751221_nokia_g240g-e
-  DEVICE_PACKAGES := kmod-usb3
+  DEVICE_PACKAGES := kmod-usb3 semtech-gn25l98-firmware
 endef
 TARGET_DEVICES += nokia_g240g-e
 
@@ -166,7 +167,7 @@ define Device/tplink_archer-xr500v-v1
     fit none $$(KDIR)/image-$$(DEVICE_DTS).dtb external-static-with-rootfs | \
     append-metadata
   DEVICE_PACKAGES := kmod-usb3 kmod-mt7603 kmod-mt76x2 wpad-basic-mbedtls \
-    fitblk uboot-envtools omci-agent
+    fitblk uboot-envtools airoha-en7570-firmware
 endef
 TARGET_DEVICES += tplink_archer-xr500v-v1
 

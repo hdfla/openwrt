@@ -39,7 +39,7 @@ define Device/tplink_xc220-g3v
   DEVICE_VARIANT := G3v
   DEVICE_PACKAGES += hostapd-mbedtls wpad-mbedtls wpa-supplicant-mbedtls \
                      kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap kmod-mt7663-firmware-sta \
-                     omci-agent
+                     omci-agent airoha-en7571-firmware
 endef
 TARGET_DEVICES += tplink_xc220-g3v
 
@@ -50,7 +50,8 @@ define Device/jiofiber_en7528
   TRX_LOADADDR := 0x80002000
   KERNEL := kernel-bin | append-dtb | tclinux-free-bootbase-jump | lzma | \
     kernel-trx
-  DEVICE_PACKAGES := kmod-usb3 kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt7603 kmod-mt7615e kmod-mt7663-firmware-ap \
+                     airoha-en7571-firmware
 endef
 
 define Device/jiofiber_jcow414
