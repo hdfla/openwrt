@@ -108,6 +108,26 @@
 			gpios = <&pinctrl 27 GPIO_ACTIVE_LOW>;
 		};
 	};
+
+	dxs_fxs: dxs-fxs {
+		compatible = "airoha,en75xx-dxs-fxs";
+		maxlinear,slic = <&dxs0>;
+		airoha,pcm = <&pcm0>;
+		airoha,pcm-channels = <0>;
+		/* PCLK selector 3 in the existing SoC PCM control = 2.048 MHz.
+		 * Edges/bit offsets follow the OEM IntelSlicInit (DXS viewpoint).
+		 */
+		clock-frequency = <2048000>;
+		maxlinear,pcm-tx-edge = <0>;
+		maxlinear,pcm-rx-edge = <1>;
+		maxlinear,pcm-tx-offset = <7>;
+		maxlinear,pcm-rx-offset = <1>;
+		/* Register access test only; no firmware/BBD download or linefeed. */
+		airoha,bringup-mode = "identify";
+		firmware-name = "airoha-voice/DXS_FW_mitrastar.bin";
+		maxlinear,bbd-firmware = "airoha-voice/DXS_BBD.bin";
+		maxlinear,dcdc-topology = "CIBB12";
+	};
 };
 
 /*
@@ -202,35 +222,55 @@ New Maping:
 	};
 };
 
-/*
- * PEF32001 control is carried over CSI multiplexed with the PCM pins.
- *
- * Let the CSI controller own pcm_spi_pins. Otherwise pcm0 would first
- * select pcm1_pins and conflict with the CSI pinmux.
- */
+/* DXS uses CSI over the PCM wrapper; the SoC nodes already exist. */
+&pinctrl {
+	mitra_dxs_csi_pins: mitra-dxs-csi-pins {
+		/* OEM CSI, devNum=1: PCM1 plus the dedicated reset pad.
+		 * Do not request PCM2/GPIO4..7, used by all four swpX_led1.
+		 */
+		bus-mux {
+			function = "pcm";
+			groups = "pcm1";
+		};
+		reset-mux {
+			function = "pcm_spi";
+			groups = "pcm_spi_rst";
+		};
+	};
+};
+
 &pcm0 {
+	/* CSI owns the shared pins. Do not select the default pcm1 state. */
 	/delete-property/ pinctrl-names;
 	/delete-property/ pinctrl-0;
 
-	airoha,dma-channel-mask = <0x3>;
-	// status = "okay";
+	airoha,dma-channel-mask = <0x01>;
+	/* OEM: DXS RX byte slot 3, TX byte slot 4 -> SoC TX/RX 24/32 bits. */
+	airoha,tx-slot-config = <0x10301018 0x10501040 0x10701060 0x10901080>;
+	airoha,rx-slot-config = <0x10301020 0x10501040 0x10701060 0x10901080>;
+	status = "okay";
+};
+
+&zsi0 {
+	status = "disabled";
 };
 
 &isi0 {
-	/*
-	 * ISI and CSI use the same wrapper. This compatible selects the
-	 * DXS/CSI framing instead of the ProSLIC/ISI framing.
-	 */
 	compatible = "airoha,en7523-csi-spi";
-	// status = "okay";
+	/* Polling, one chip: do not claim INT or the optional CS1 pads.
+	 * INT overlaps the PON LED; CS1 overlaps the power LED in this pinctrl.
+	 */
+	pinctrl-0 = <&mitra_dxs_csi_pins>;
+	status = "okay";
 
 	dxs0: slic@0 {
 		compatible = "maxlinear,pef32001";
 		reg = <0>;
-
 		spi-max-frequency = <2000000>;
 		spi-cpol;
 		spi-cpha;
+		/* No reset GPIO/polarity inferred from the OEM logical GPIO IDs. */
+		reset-interval-ms = <10>;
 	};
 };
 
@@ -369,26 +409,18 @@ New Maping:
 
 &gsw_phy1 {
 	status = "okay";
-
-	pinctrl-0 = <&swp1_led0 &swp1_led1>;
 };
 
 &gsw_phy2 {
 	status = "okay";
-
-	pinctrl-0 = <&swp2_led0 &swp2_led1>;
 };
 
 &gsw_phy3 {
 	status = "okay";
-
-	pinctrl-0 = <&swp3_led0 &swp3_led1>;
 };
 
 &gsw_phy4 {
 	status = "okay";
-
-	pinctrl-0 = <&swp4_led0 &swp4_led1>;
 };
 
 &gsw_phy1_led0 {
@@ -429,4 +461,28 @@ New Maping:
 &gsw_phy4_led1 {
 	status = "okay";
 	color = <LED_COLOR_ID_YELLOW>;
+};
+
+&swp1_led0 {
+	mux {
+		pins = "gpio25";
+	};
+};
+
+&swp2_led0 {
+	mux {
+		pins = "gpio24";
+	};
+};
+
+&swp3_led0 {
+	mux {
+		pins = "gpio23";
+	};
+};
+
+&swp4_led0 {
+	mux {
+		pins = "gpio22";
+	};
 };
