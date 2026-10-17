@@ -10,8 +10,7 @@ board=$(board_name)
 
 # Switch
 case "$board" in
-  askey,rtf8225vw | \
-  mitrastar,gpt-2742gx4x5v6)
+  askey,rtf8225vw)
     ucidef_set_led_netdev "lan1" "lan1" "mt7530-0:09:green:lan" "lan1" "link"
     ucidef_set_led_netdev "lan1-act" "lan1-act" "mt7530-0:09:yellow:activity" "lan1" "link_1000 tx rx"
     ucidef_set_led_netdev "lan2" "lan2" "mt7530-0:0a:green:lan" "lan2" "link"
@@ -20,6 +19,16 @@ case "$board" in
     ucidef_set_led_netdev "lan3-act" "lan3-act" "mt7530-0:0b:yellow:activity" "lan3" "link_1000 tx rx"
     ucidef_set_led_netdev "lan4" "lan4" "mt7530-0:0c:green:lan" "lan4" "link"
     ucidef_set_led_netdev "lan4-act" "lan4-act" "mt7530-0:0c:yellow:activity" "lan4" "link_1000 tx rx"
+    ;;
+  mitrastar,gpt-2742gx4x5v6)
+    ucidef_set_led_netdev "lan4" "lan4" "mt7530-0:09:green:lan" "lan4" "link"
+    ucidef_set_led_netdev "lan4-act" "lan4-act" "mt7530-0:09:yellow:activity" "lan4" "link_1000 tx rx"
+    ucidef_set_led_netdev "lan3" "lan3" "mt7530-0:0a:green:lan" "lan3" "link"
+    ucidef_set_led_netdev "lan3-act" "lan3-act" "mt7530-0:0a:yellow:activity" "lan3" "link_1000 tx rx"
+    ucidef_set_led_netdev "lan2" "lan2" "mt7530-0:0b:green:lan" "lan2" "link"
+    ucidef_set_led_netdev "lan2-act" "lan2-act" "mt7530-0:0b:yellow:activity" "lan2" "link_1000 tx rx"
+    ucidef_set_led_netdev "lan1" "lan1" "mt7530-0:0c:green:lan" "lan1" "link"
+    ucidef_set_led_netdev "lan1-act" "lan1-act" "mt7530-0:0c:yellow:activity" "lan1" "link_1000 tx rx"
     ;;
   heimgard,hx30)
     ucidef_set_led_netdev "lan1" "lan1" "mt7530-0:09::lan" "lan1" "link tx rx"

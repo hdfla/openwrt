@@ -462,27 +462,3 @@ New Maping:
 	status = "okay";
 	color = <LED_COLOR_ID_YELLOW>;
 };
-
-&swp1_led0 {
-	mux {
-		pins = "gpio25";
-	};
-};
-
-&swp2_led0 {
-	mux {
-		pins = "gpio24";
-	};
-};
-
-&swp3_led0 {
-	mux {
-		pins = "gpio23";
-	};
-};
-
-&swp4_led0 {
-	mux {
-		pins = "gpio22";
-	};
-};

@@ -19,116 +19,123 @@
 	};
 };
 
-&nand {
-	status = "okay";
-	econet,bmt;
-	econet,bbt-table-size = <250>;
+&spi0 {
+	nand: flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		spi-max-frequency = <25000000>;
+		spi-rx-bus-width = <2>;
+		spi-tx-bus-width = <1>;
+		nand-ecc-engine = <&nand>;
+		econet,bmt;
+		econet,bbt-table-size = <250>;
 
-	partitions {
-		compatible = "fixed-partitions";
-		#address-cells = <1>;
-		#size-cells = <1>;
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
 
-		partition@0 {
-			label = "bootloader";
-			reg = <0x0 0x40000>;
-			read-only;
-		};
+			partition@0 {
+				label = "bootloader";
+				reg = <0x0 0x40000>;
+				read-only;
+			};
 
-		partition@40000 {
-			label = "romfile";
-			reg = <0x40000 0x40000>;
-		};
+			partition@40000 {
+				label = "romfile";
+				reg = <0x40000 0x40000>;
+			};
 
-		partition@80000 {
-			label = "tclinux";
-			reg = <0x80000 0x2200000>;
-			econet,enable-remap;
-		};
+			partition@80000 {
+				label = "tclinux";
+				reg = <0x80000 0x2200000>;
+				econet,enable-remap;
+			};
 
-		partition@480000 {
-			label = "rootfs";
-			reg = <0x480000 0x1e00000>;
-			linux,rootfs;
-		};
+			partition@480000 {
+				label = "rootfs";
+				reg = <0x480000 0x1e00000>;
+				linux,rootfs;
+			};
 
-		partition@2280000 {
-			label = "kernel_slave";
-			reg = <0x2280000 0x300000>;
-		};
+			partition@2280000 {
+				label = "kernel_slave";
+				reg = <0x2280000 0x300000>;
+			};
 
-		partition@2580000 {
-			label = "rootfs_slave";
-			reg = <0x2580000 0x1f00000>;
-		};
+			partition@2580000 {
+				label = "rootfs_slave";
+				reg = <0x2580000 0x1f00000>;
+			};
 
-		partition@4480000 {
-			label = "kernel_oflt";
-			reg = <0x4480000 0x300000>;
-		};
+			partition@4480000 {
+				label = "kernel_oflt";
+				reg = <0x4480000 0x300000>;
+			};
 
-		partition@4780000 {
-			label = "rootfs_oflt";
-			reg = <0x4780000 0xc00000>;
-		};
+			partition@4780000 {
+				label = "rootfs_oflt";
+				reg = <0x4780000 0xc00000>;
+			};
 
-		partition@5380000 {
-			label = "config";
-			reg = <0x5380000 0x800000>;
-		};
+			partition@5380000 {
+				label = "config";
+				reg = <0x5380000 0x800000>;
+			};
 
-		partition@5b80000 {
-			label = "log";
-			reg = <0x5b80000 0xc00000>;
-		};
+			partition@5b80000 {
+				label = "log";
+				reg = <0x5b80000 0xc00000>;
+			};
 
-		partition@6780000 {
-			label = "extfs";
-			reg = <0x6780000 0x600000>;
-		};
+			partition@6780000 {
+				label = "extfs";
+				reg = <0x6780000 0x600000>;
+			};
 
-		/*
-		 * 256 KiB optical/laser calibration for the JiuZhou/GN25L98
-		 * BOSA. The airoha en7570 driver reads its factory cal as 100
-		 * big-endian 32-bit words; the exact offset within this
-		 * partition must be confirmed from a live dump before wiring
-		 * the nvmem cell (see en7526gt: magic at cell offset 0x94).
-		 */
-		partition@6d80000 {
-			label = "bosa";
-			reg = <0x6d80000 0x40000>;
-		};
+			/*
+			 * 256 KiB optical/laser calibration for the JiuZhou/GN25L98
+			 * BOSA. The airoha en7570 driver reads its factory cal as 100
+			 * big-endian 32-bit words; the exact offset within this
+			 * partition must be confirmed from a live dump before wiring
+			 * the nvmem cell (see en7526gt: magic at cell offset 0x94).
+			 */
+			partition@6d80000 {
+				label = "bosa";
+				reg = <0x6d80000 0x40000>;
+			};
 
-		partition@6dc0000 {
-			label = "flag";
-			reg = <0x6dc0000 0x40000>;
-		};
+			partition@6dc0000 {
+				label = "flag";
+				reg = <0x6dc0000 0x40000>;
+			};
 
-		partition@6e00000 {
-			label = "flagback";
-			reg = <0x6e00000 0x40000>;
-		};
+			partition@6e00000 {
+				label = "flagback";
+				reg = <0x6e00000 0x40000>;
+			};
 
-		partition@6e40000 {
-			label = "ri";
-			reg = <0x6e40000 0x40000>;
+			partition@6e40000 {
+				label = "ri";
+				reg = <0x6e40000 0x40000>;
 
-			nvmem-layout {
-				compatible = "fixed-layout";
-				#address-cells = <1>;
-				#size-cells = <1>;
+				nvmem-layout {
+					compatible = "fixed-layout";
+					#address-cells = <1>;
+					#size-cells = <1>;
 
-				macaddr_ri_3e: macaddr@3e {
-					compatible = "mac-base";
-					reg = <0x3e 0x6>;
-					#nvmem-cell-cells = <1>;
+					macaddr_ri_3e: macaddr@3e {
+						compatible = "mac-base";
+						reg = <0x3e 0x6>;
+						#nvmem-cell-cells = <1>;
+					};
 				};
 			};
-		};
 
-		partition@6e80000 {
-			label = "riback";
-			reg = <0x6e80000 0x40000>;
+			partition@6e80000 {
+				label = "riback";
+				reg = <0x6e80000 0x40000>;
+			};
 		};
 	};
 };

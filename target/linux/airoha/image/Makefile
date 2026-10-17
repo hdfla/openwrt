@@ -72,9 +72,9 @@ endef
 define Device/FitVmlinux
 	KERNEL_NAME := vmlinux
   KERNEL_LOADADDR := 0x82000000
-  KERNEL := kernel-bin | \
+  KERNEL = kernel-bin | \
     fit none $$(KDIR)/image-$$(DEVICE_DTS).dtb
-  KERNEL_INITRAMFS := kernel-bin | \
+  KERNEL_INITRAMFS = kernel-bin | \
     fit none $$(KDIR)/image-$$(DEVICE_DTS).dtb
 endef
 

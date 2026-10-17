@@ -207,80 +207,85 @@
 };
 
 &spi0 {
-	status = "okay";
-};
+	nand: flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		spi-max-frequency = <25000000>;
+		spi-rx-bus-width = <2>;
+		spi-tx-bus-width = <1>;
+		nand-ecc-engine = <&nand>;
 
-/* Layout of OpenWrt's U-Boot for this board (airoha/u-boot), which replaces
- * the OEM bootloader and its BMT block remapping: tcboot.bin (DDR stage and
- * U-Boot) in the first MiB, everything else in one UBI partition. U-Boot's
- * format_ubi_part creates the volumes and copies the OEM "misc" partition
- * into the "misc" volume, so the factory data keeps its OEM offsets.
- */
-&nand {
-	partitions {
-		compatible = "fixed-partitions";
-		#address-cells = <1>;
-		#size-cells = <1>;
+		/* Layout of OpenWrt's U-Boot for this board (airoha/u-boot), which replaces
+		 * the OEM bootloader and its BMT block remapping: tcboot.bin (DDR stage and
+		 * U-Boot) in the first MiB, everything else in one UBI partition. U-Boot's
+		 * format_ubi_part creates the volumes and copies the OEM "misc" partition
+		 * into the "misc" volume, so the factory data keeps its OEM offsets.
+		 */
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
 
-		partition@0 {
-			label = "u-boot";
-			reg = <0x000000 0x100000>;
-			read-only;
-		};
+			partition@0 {
+				label = "u-boot";
+				reg = <0x000000 0x100000>;
+				read-only;
+			};
 
-		partition@100000 {
-			label = "ubi";
-			compatible = "linux,ubi";
-			reg = <0x100000 0x7f00000>;
+			partition@100000 {
+				label = "ubi";
+				compatible = "linux,ubi";
+				reg = <0x100000 0x7f00000>;
 
-			volumes {
-				ubi-volume-ubootenv {
-					volname = "ubootenv";
+				volumes {
+					ubi-volume-ubootenv {
+						volname = "ubootenv";
 
-					nvmem-layout {
-						compatible = "u-boot,env-redundant-bool";
-					};
-				};
-
-				ubi-volume-ubootenv2 {
-					volname = "ubootenv2";
-
-					nvmem-layout {
-						compatible = "u-boot,env-redundant-bool";
-					};
-				};
-
-				ubi-volume-misc {
-					volname = "misc";
-					read-only;
-
-					nvmem-layout {
-						compatible = "fixed-layout";
-						#address-cells = <1>;
-						#size-cells = <1>;
-
-						/* LAN MAC from the label; WAN is +1, Wi-Fi +2. */
-						macaddr_misc_f100: macaddr@f100 {
-							compatible = "mac-base";
-							reg = <0xf100 0x6>;
-							#nvmem-cell-cells = <1>;
-						};
-
-						/* Airoha LDD/LA calibration: 100 words, magic 0x07050700 at +0x94. */
-						en7570_cal: calibration@20000 {
-							reg = <0x20000 0x190>;
-						};
-
-						/* MT7662 (5 GHz) EEPROM, for the PCIe radio node. */
-						eeprom_misc_e0000: eeprom@e0000 {
-							reg = <0xe0000 0x200>;
+						nvmem-layout {
+							compatible = "u-boot,env-redundant-bool";
 						};
 					};
-				};
 
-				firmware: ubi-volume-firmware {
-					volname = "fit";
-					compatible = "denx,uimage";
+					ubi-volume-ubootenv2 {
+						volname = "ubootenv2";
+
+						nvmem-layout {
+							compatible = "u-boot,env-redundant-bool";
+						};
+					};
+
+					ubi-volume-misc {
+						volname = "misc";
+						read-only;
+
+						nvmem-layout {
+							compatible = "fixed-layout";
+							#address-cells = <1>;
+							#size-cells = <1>;
+
+							/* LAN MAC from the label; WAN is +1, Wi-Fi +2. */
+							macaddr_misc_f100: macaddr@f100 {
+								compatible = "mac-base";
+								reg = <0xf100 0x6>;
+								#nvmem-cell-cells = <1>;
+							};
+
+							/* Airoha LDD/LA calibration: 100 words, magic 0x07050700 at +0x94. */
+							en7570_cal: calibration@20000 {
+								reg = <0x20000 0x190>;
+							};
+
+							/* MT7662 (5 GHz) EEPROM, for the PCIe radio node. */
+							eeprom_misc_e0000: eeprom@e0000 {
+								reg = <0xe0000 0x200>;
+							};
+						};
+					};
+
+					firmware: ubi-volume-firmware {
+						volname = "fit";
+						compatible = "denx,uimage";
+					};
 				};
 			};
 		};

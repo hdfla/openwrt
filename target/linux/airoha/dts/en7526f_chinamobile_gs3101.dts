@@ -80,78 +80,85 @@
 	};
 };
 
-&nand {
-	status = "okay";
-	econet,bmt;
-	econet,bbt-table-size = <250>;
+&spi0 {
+	nand: flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		spi-max-frequency = <25000000>;
+		spi-rx-bus-width = <2>;
+		spi-tx-bus-width = <1>;
+		nand-ecc-engine = <&nand>;
+		econet,bmt;
+		econet,bbt-table-size = <250>;
 
-	partitions {
-		compatible = "fixed-partitions";
-		#address-cells = <1>;
-		#size-cells = <1>;
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
 
-		partition@0 {
-			label = "bootloader";
-			reg = <0x0 0x40000>;
-			read-only;
-		};
+			partition@0 {
+				label = "bootloader";
+				reg = <0x0 0x40000>;
+				read-only;
+			};
 
-		partition@40000 {
-			label = "romfile";
-			reg = <0x40000 0x40000>;
-		};
+			partition@40000 {
+				label = "romfile";
+				reg = <0x40000 0x40000>;
+			};
 
-		partition@80000 {
-			label = "tclinux";
-			reg = <0x80000 0x1000000>;
-			econet,enable-remap;
-		};
+			partition@80000 {
+				label = "tclinux";
+				reg = <0x80000 0x1000000>;
+				econet,enable-remap;
+			};
 
-		partition1@80000 {
-			label = "tclinux_kernel";
-			reg = <0x80000 0x400000>;
-			econet,enable-remap;
-		};
+			partition1@80000 {
+				label = "tclinux_kernel";
+				reg = <0x80000 0x400000>;
+				econet,enable-remap;
+			};
 
-		rootA: partition1@480000 {
-			label = "tclinux_rootfs";
-			reg = <0x480000 0xc00000>;
-		};
+			rootA: partition1@480000 {
+				label = "tclinux_rootfs";
+				reg = <0x480000 0xc00000>;
+			};
 
-		partition@1080000 {
-			label = "tclinux_alt";
-			reg = <0x1080000 0x1000000>;
-			econet,enable-remap;
-		};
+			partition@1080000 {
+				label = "tclinux_alt";
+				reg = <0x1080000 0x1000000>;
+				econet,enable-remap;
+			};
 
-		partition1@1080000 {
-			label = "tclinux_alt_kernel";
-			reg = <0x1080000 0x400000>;
-			econet,enable-remap;
-		};
+			partition1@1080000 {
+				label = "tclinux_alt_kernel";
+				reg = <0x1080000 0x400000>;
+				econet,enable-remap;
+			};
 
-		rootB: partition1@1480000 {
-			label = "tclinux_alt_rootfs";
-			reg = <0x1480000 0xc00000>;
-		};
+			rootB: partition1@1480000 {
+				label = "tclinux_alt_rootfs";
+				reg = <0x1480000 0xc00000>;
+			};
 
-		root2: partition@2080000 {
-			label = "common_rootfs";
-			reg = <0x2080000 0xbdc0000>;
-		};
+			root2: partition@2080000 {
+				label = "common_rootfs";
+				reg = <0x2080000 0xbdc0000>;
+			};
 
-		partition@de40000 {
-			label = "reservearea";
-			reg = <0xde40000 0x1c0000>;
+			partition@de40000 {
+				label = "reservearea";
+				reg = <0xde40000 0x1c0000>;
 
-			nvmem-layout {
-				compatible = "fixed-layout";
-				#address-cells = <1>;
-				#size-cells = <1>;
+				nvmem-layout {
+					compatible = "fixed-layout";
+					#address-cells = <1>;
+					#size-cells = <1>;
 
-				eeprom_reserve_140000: eeprom@140000 {
-					/* MT7592 */
-					reg = <0x140000 0x200>;
+					eeprom_reserve_140000: eeprom@140000 {
+						/* MT7592 */
+						reg = <0x140000 0x200>;
+					};
 				};
 			};
 		};

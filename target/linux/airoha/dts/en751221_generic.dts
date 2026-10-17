@@ -18,23 +18,30 @@
 	};
 };
 
-&nand {
-	status = "okay";
+&spi0 {
+	nand: flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		spi-max-frequency = <25000000>;
+		spi-rx-bus-width = <2>;
+		spi-tx-bus-width = <1>;
+		nand-ecc-engine = <&nand>;
 
-	partitions {
-		compatible = "fixed-partitions";
-		#address-cells = <1>;
-		#size-cells = <1>;
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
 
-		partition@0 {
-			label = "bootloader";
-			reg = <0x00000000 0x00400000>;
-			read-only;
-		};
+			partition@0 {
+				label = "bootloader";
+				reg = <0x00000000 0x00400000>;
+				read-only;
+			};
 
-		partition@400000 {
-			label = "rest_of_flash";
-			reg = <0x00400000 0x07c00000>;
+			partition@400000 {
+				label = "rest_of_flash";
+				reg = <0x00400000 0x07c00000>;
+			};
 		};
 	};
 };
