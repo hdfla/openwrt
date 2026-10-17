@@ -172,7 +172,7 @@
 							#size-cells = <1>;
 
 							cal_l98: cal@800 {
-								reg = <0x0 0x800>;
+								reg = <0x0 0x80>;
 							};
 						};
 					};
@@ -228,6 +228,7 @@
 
 		nvmem-cells = <&cal_l98>;
 		nvmem-cell-names = "calibration";
+		semtech,base-firmware-name = "semtech/gn25l98-base.bin";
 
 		#optical-frontend-cells = <0>;
 	};
