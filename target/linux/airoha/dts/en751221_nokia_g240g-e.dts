@@ -7,6 +7,25 @@
 	model = "Nokia G-240G-E";
 	compatible = "nokia,g240g-e", "econet,en751221";
 
+	/* ROM/register access only; no firmware, BBD or FXS linefeed. */
+	dxs_fxs: dxs-fxs {
+		compatible = "airoha,en75xx-dxs-fxs";
+		maxlinear,slic = <&dxs0>;
+		airoha,pcm = <&pcm0>;
+		airoha,pcm-channels = <0 1>;
+		airoha,bringup-mode = "identify";
+		firmware-name = "airoha-voice/DXS_FW.bin";
+		maxlinear,bbd-firmware = "airoha-voice/DXS_BBD.bin";
+		maxlinear,dcdc-topology = "CIBB12";
+
+		/* Nominal timing from the Nokia OEM DXS_PCM_InitCh defaults. */
+		clock-frequency = <2048000>;
+		maxlinear,pcm-tx-edge = <0>;
+		maxlinear,pcm-rx-edge = <1>;
+		maxlinear,pcm-tx-offset = <0>;
+		maxlinear,pcm-rx-offset = <0>;
+	};
+
 	memory@0 {
 		device_type = "memory";
 		reg = <0x00000000 0x10000000>;
@@ -87,7 +106,7 @@
 		};
 
 		/* FXS1 */
-		led@25 {
+		tel1: led@25 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_STATUS;
 			function-enumerator = <25>;
@@ -95,7 +114,7 @@
 		};
 
 		/* FXS2 */
-		led@26 {
+		tel2: led@26 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_STATUS;
 			function-enumerator = <26>;
@@ -111,7 +130,7 @@
 		};
 
 		/* VoIP */
-		led@29 {
+		voip: led@29 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_STATUS;
 			function-enumerator = <29>;
@@ -188,34 +207,43 @@
 };
 
 /*
- * One PEF32002/DXS102 provides both FXS ports.
- * Audio uses PCM1; control transactions are transported over ZSI.
+ * One PEF32002/DXS102 provides two FXS ports over CSI/PCM1.
+ * pcm1_pins uses GPIO12-15, not GPIO25-28. The PCM consumer owns
+ * this group; do not request it again from the serial controller.
  */
 &pcm0 {
 	airoha,dma-channel-mask = <0x3>;
-	// status = "okay";
+	status = "okay";
 };
 
+/* Keep the base label; the compatible selects CSI framing. */
 &zsi0 {
+	compatible = "econet,en751221-csi-spi";
+	reg-names = "isi";
+	reset-names = "isi";
+	/delete-property/ airoha,legacy-scu-programming;
+	/delete-property/ airoha,zsi-gap-us;
+
 	/*
-	 * Replaces the platform-style Zarlink ZSI bus with the ZSI-to-SPI
-	 * controller required by drv_tapi_dxs.
+	 * Do not inherit pcm_spi (GPIO4-7) or pcm_spi_rst (GPIO2):
+	 * this board uses GPIO5 for a button and GPIO2 for a PON LED.
+	 * CSI shares PCM1; PCM1 pinmux is selected by pcm0 above.
 	 */
-	compatible = "econet,en751221-zsi-spi";
-	// status = "okay";
+	/delete-property/ pinctrl-names;
+	/delete-property/ pinctrl-0;
+	status = "okay";
 
 	dxs0: slic@0 {
 		compatible = "maxlinear,pef32002";
 		reg = <0>;
-
 		spi-max-frequency = <2000000>;
 		spi-cpol;
 		spi-cpha;
+		/* No physical reset GPIO or external IRQ has been verified. */
+		reset-interval-ms = <10>;
 
-		/*
-		 * Start in polling mode. Add interrupts only after confirming
-		 * the physical DXS interrupt routing.
-		 */
+		voip-leds = <&tel1>, <&tel2>, <&voip>;
+		voip-leds-names = "fxs0", "fxs1", "status";
 	};
 };
 
