@@ -78,6 +78,19 @@ else
   endif
 endif
 
+# Keep the Git archive identifier out of package versions. Local version
+# suffixes belong to kernel.release; use the source version for packaging.
+LINUX_PKG_VERSION:=$(LINUX_VERSION)
+ifneq ($(call qstrip,$(CONFIG_EXTERNAL_KERNEL_TREE))$(call qstrip,$(CONFIG_KERNEL_GIT_CLONE_URI)),)
+  ifneq ($(wildcard $(LINUX_DIR)/Makefile),)
+    LINUX_PKG_VERSION:=$(strip $(shell awk '/^VERSION =/ { v = $$3 } /^PATCHLEVEL =/ { v = v "." $$3 } /^SUBLEVEL =/ { v = v "." $$3 } /^EXTRAVERSION =/ { print v $$3; exit }' $(LINUX_DIR)/Makefile))
+  else
+    # Metadata scans can run before the kernel source has been prepared.
+    LINUX_PKG_VERSION:=$(KERNEL_PATCHVER)$(strip $(LINUX_VERSION-$(KERNEL_PATCHVER)))
+  endif
+endif
+LINUX_PKG_VERSION:=$(subst -rc,_rc,$(LINUX_PKG_VERSION))
+
 ifneq (,$(findstring uml,$(BOARD)))
   LINUX_KARCH=um
 else ifneq (,$(findstring $(ARCH) , aarch64 aarch64_be ))
@@ -211,8 +224,8 @@ define KernelPackage
     TITLE:=$(TITLE)
     SECTION:=kernel
     CATEGORY:=Kernel modules
-    EXTRA_DEPENDS:=kernel (=$(subst -rc,_rc,$(LINUX_VERSION))~$(LINUX_VERMAGIC)-r$(LINUX_RELEASE))
-    VERSION:=$(subst -rc,_rc,$(LINUX_VERSION))$(if $(PKG_VERSION),.$(PKG_VERSION))-r$(if $(PKG_RELEASE),$(PKG_RELEASE),$(LINUX_RELEASE))
+    EXTRA_DEPENDS:=kernel (=$(LINUX_PKG_VERSION)~$(LINUX_VERMAGIC)-r$(LINUX_RELEASE))
+    VERSION:=$(LINUX_PKG_VERSION)$(if $(PKG_VERSION),.$(PKG_VERSION))-r$(if $(PKG_RELEASE),$(PKG_RELEASE),$(LINUX_RELEASE))
     PKGFLAGS:=$(PKGFLAGS)
     $(call KernelPackage/$(1))
     $(call KernelPackage/$(1)/$(BOARD))
