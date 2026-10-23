@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-#include <dt-bindings/clock/econet,en751221-scu.h>
+#include <dt-bindings/clock/en7523-clk.h>
 
 #include <dt-bindings/reset/econet,en751221-scu.h>
 #include <dt-bindings/leds/common.h>
@@ -40,12 +40,38 @@
 			device_type = "cpu";
 			compatible = "mips,mips34Kc";
 			reg = <0>;
+			clocks = <&scuclk EN7523_CLK_CPU>;
+			operating-points-v2 = <&cpu_opp_table>;
 		};
 
 		cpu1: cpu@1 {
 			device_type = "cpu";
 			compatible = "mips,mips34Kc";
 			reg = <1>;
+			clocks = <&scuclk EN7523_CLK_CPU>;
+			operating-points-v2 = <&cpu_opp_table>;
+		};
+	};
+
+	cpu_opp_table: opp-table-cpu {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		cpu_opp_700: opp-700000000 {
+			opp-hz = /bits/ 64 <700000000>;
+		};
+
+		cpu_opp_800: opp-800000000 {
+			opp-hz = /bits/ 64 <800000000>;
+		};
+
+		cpu_opp_900: opp-900000000 {
+			opp-hz = /bits/ 64 <900000000>;
+		};
+
+		cpu_opp_1000: opp-1000000000 {
+			opp-hz = /bits/ 64 <1000000000>;
+			turbo-mode;
 		};
 	};
 
@@ -60,7 +86,7 @@
 		compatible = "econet,en751221-spi";
 		reg = <0x1fa10000 0x140>;
 
-		clocks = <&scuclk EN751221_CLK_SPI>;
+		clocks = <&scuclk EN7523_CLK_SPI>;
 		clock-names = "spi";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -115,10 +141,17 @@
 		reg = <0x1fa20000 0x400>;
 	};
 
+	scu_efuse: syscon@1fbf8200 {
+		compatible = "airoha,scu-efuse", "syscon";
+		reg = <0x1fbf8200 0x1c>;
+	};
+
 	scuclk: system-controller@1fb00000 {
 		compatible = "econet,en751221-scu", "syscon";
 		reg = <0x1fb00000 0x1000>;
+
 		airoha,chip-scu = <&chip_scu>;
+		airoha,scu-efuse = <&scu_efuse>;
 
 		#clock-cells = <1>;
 		#reset-cells = <1>;
@@ -128,7 +161,7 @@
 		compatible = "econet,en751221-wdt";
 		reg = <0x1fbf0100 0x3c>;
 
-		clocks = <&scuclk EN751221_CLK_BUS>;
+		clocks = <&scuclk EN7523_CLK_BUS>;
 		clock-names = "bus";
 	};
 
@@ -181,7 +214,7 @@
 		interrupt-parent = <&intc>;
 		interrupts = <23>;
 		interrupt-names = "pcie_irq";
-		clocks = <&scuclk EN751221_CLK_PCIE>;
+		clocks = <&scuclk EN7523_CLK_PCIE>;
 		clock-names = "sys_ck0";
 		phys = <&pcie_phy0>;
 		phy-names = "pcie-phy0";
@@ -223,7 +256,7 @@
 		interrupt-parent = <&intc>;
 		interrupts = <24>;
 		interrupt-names = "pcie_irq";
-		clocks = <&scuclk EN751221_CLK_PCIE>;
+		clocks = <&scuclk EN7523_CLK_PCIE>;
 		clock-names = "sys_ck1";
 		phys = <&pcie_phy1>;
 		phy-names = "pcie-phy1";
@@ -333,19 +366,6 @@
 				};
 			};
 
-			/*
-			 * PCM/SLIC groups in chip_scu + 0x0104 (IOMUX_CONTROL1).
-			 * Group arrays contain pinctrl IDs: GPIO n is pin 13 + n.
-			 * pcm1: GPIO12-15 (pins 25-28), bit 13;
-			 * pcm2: GPIO4-7 (pins 17-20), bit 14;
-			 * pcm_spi: GPIO4-7 (pins 17-20), bit 12;
-			 * pcm_spi_int: GPIO3 (pin 16), bit 11;
-			 * pcm_spi_rst: GPIO2 (pin 15), bit 10;
-			 * pcm_spi_cs4: GPIO9 (pin 22), bit 9;
-			 * pcm_spi_cs3: GPIO3 (pin 16), bit 8.
-			 * pcm2 and pcm_spi overlap, as do pcm_spi_int and
-			 * pcm_spi_cs3. Select only the groups wired by the board.
-			 */
 			pcm1_pins: pcm1-pins {
 				mux {
 					function = "pcm";
@@ -360,7 +380,6 @@
 				};
 			};
 
-			/* Optional SLIC control group: GPIO4-7 plus reset on GPIO2. */
 			pcm_spi_pins: pcm-spi-pins {
 				mux {
 					function = "pcm_spi";

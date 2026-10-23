@@ -72,6 +72,8 @@
 			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_STATUS;
 			function-enumerator = <24>;
+
+			linux,default-trigger = "default-on";
 		};
 
 		// White
