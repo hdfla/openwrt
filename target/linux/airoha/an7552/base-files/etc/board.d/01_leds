@@ -1,0 +1,29 @@
+#
+# Copyright (C) 2015 OpenWrt.org
+#
+
+. /lib/functions/uci-defaults.sh
+
+board_config_update
+
+board=$(board_name)
+
+# Switch
+case "$board" in
+  airoha,an7552-evb |\
+  airoha,an7563-evb)
+    "internet"
+    "power"
+    "usb2"
+    "usb_0"
+    "voip_hook"
+    "wlan"
+    "wps"
+    "xponLos"
+    "xponStatus"
+    ;;
+esac
+
+board_config_flush
+
+exit 0
