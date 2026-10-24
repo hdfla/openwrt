@@ -872,6 +872,7 @@
 		npu: npu@1e900000 {
 			compatible = "airoha,en7581-npu";
 			reg = <0x0 0x1e900000 0x0 0x313000>;
+
 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
@@ -887,6 +888,10 @@
 				     <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
 				     <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "mbox", "wdt0", "wdt1", "wdt2", "wdt3",
+					  "wdt4", "wdt5", "wdt6", "wdt7", "wlan0",
+					  "wlan1", "wlan2", "wlan3", "wlan4", "wlan5";
+
 			memory-region = <&npu_binary>;
 			memory-region-names = "binary";
 
