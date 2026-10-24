@@ -11,8 +11,12 @@ setup_interfaces()
   local board="$1"
 
   case "$board" in
-  airoha,en7523-evb)
+  airoha,en7523-evb | \
+  askey,rtf8225vw | \
+  mitrastar,gpt-2742gx4x5v6 | \
+  tplink,xx230v-v1)
     ucidef_set_interface_lan "lan1 lan2 lan3 lan4"
+    ucidef_set_interface_wan "pon0" "dhcp"
     ;;
   genexis,arcee | \
   genexis,pixly_r1)
@@ -37,11 +41,6 @@ setup_interfaces()
     ;;
   tplink,ex530v-v1)
     ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
-    ;;
-  askey,rtf8225vw | \
-  mitrastar,gpt-2742gx4x5v6 | \
-  tplink,xx230v-v1)
-    ucidef_set_interface_lan "lan1 lan2 lan3 lan4"
     ;;
   *)
     echo "Unsupported hardware. Network interfaces not initialized"
