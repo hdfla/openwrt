@@ -1,0 +1,14 @@
+#!/bin/sh
+# Keep existing xPON configuration and retain the legacy file as a backup.
+[ -e /etc/config/xpon ] && exit 0
+umask 077
+mkdir -p /etc/config || exit 1
+xpon_tmp=/etc/config/.xpon.$$
+trap 'rm -f "$xpon_tmp"' EXIT HUP INT TERM
+if [ -f /etc/config/omci ]; then
+	cp /etc/config/omci "$xpon_tmp" || exit 1
+else
+	cp /usr/share/xpon/xpon.config "$xpon_tmp" || exit 1
+fi
+chmod 600 "$xpon_tmp" || exit 1
+mv "$xpon_tmp" /etc/config/xpon

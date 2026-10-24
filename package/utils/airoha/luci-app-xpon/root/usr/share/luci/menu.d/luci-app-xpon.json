@@ -1,0 +1,108 @@
+{
+	"admin/xpon": {
+		"title": "xPON",
+		"order": 65,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-xpon"
+			]
+		}
+	},
+	"admin/xpon/config": {
+		"title": "Configuration",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "xpon/config"
+		}
+	},
+	"admin/xpon/omci": {
+		"title": "OMCI",
+		"order": 20,
+		"action": {
+			"type": "firstchild"
+		}
+	},
+	"admin/xpon/epon": {
+		"title": "EPON",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "xpon/epon"
+		}
+	},
+	"admin/xpon/status": {
+		"title": "Status",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "xpon/status"
+		}
+	},
+	"admin/xpon/omci/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/status"
+		}
+	},
+	"admin/xpon/omci/profiles": {
+		"title": "Profiles",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/profiles"
+		}
+	},
+	"admin/xpon/omci/mib": {
+		"title": "MIB",
+		"order": 30,
+		"action": {
+			"type": "firstchild"
+		}
+	},
+	"admin/xpon/omci/mib/inventory": {
+		"title": "Inventory",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/mib/inventory"
+		}
+	},
+	"admin/xpon/omci/mib/gpon": {
+		"title": "GPON",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/mib/gpon"
+		}
+	},
+	"admin/xpon/omci/mib/bridge": {
+		"title": "Bridge / UNI",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/mib/bridge"
+		}
+	},
+	"admin/xpon/omci/mib/multicast": {
+		"title": "Multicast",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/mib/multicast"
+		}
+	},
+	"admin/xpon/omci/mib/other": {
+		"title": "Other",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "xpon/omci/mib/other"
+		}
+	}
+}

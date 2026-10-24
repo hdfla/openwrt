@@ -1,0 +1,53 @@
+{
+	"luci-app-xpon": {
+		"description": "Grant access to xPON setup and observation",
+		"read": {
+			"ubus": {
+				"xpon.agent": [
+					"family",
+					"devices",
+					"status",
+					"capabilities",
+					"links",
+					"endpoints",
+					"unis",
+					"report_get",
+					"omci_family",
+					"omci_status",
+					"omci_config_list",
+					"omci_config_details",
+					"omci_config_get",
+					"omci_config_inspect",
+					"omci_class_list",
+					"omci_class_get",
+					"omci_mib_list",
+					"omci_mib_get",
+					"omci_profile_list"
+				]
+			},
+			"uci": [
+				"xpon"
+			]
+		},
+		"write": {
+			"ubus": {
+				"xpon.agent": [
+					"apply",
+					"link_set",
+					"report_set",
+					"omci_agent_set",
+					"omci_config_set",
+					"omci_mib_set",
+					"omci_mib_delete",
+					"omci_mib_reset",
+					"omci_raw_tx",
+					"omci_apply",
+					"omci_profile_apply"
+				]
+			},
+			"uci": [
+				"xpon"
+			]
+		}
+	}
+}
