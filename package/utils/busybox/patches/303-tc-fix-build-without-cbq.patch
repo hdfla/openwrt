@@ -1,0 +1,66 @@
+Subject: [PATCH] tc: fix build with headers without CBQ support
+
+Linux 6.8 removed the CBQ UAPI definitions from linux/pkt_sched.h.
+Only build the CBQ option printer, its rate helper and both call sites
+when TCA_CBQ_MAX is available. Keep the tc applet enabled and preserve
+CBQ decoding when building with older headers.
+
+Reference: https://lists.busybox.net/pipermail/busybox/2026-August/092422.html
+
+--- a/networking/tc.c
++++ b/networking/tc.c
+@@ -176,6 +176,7 @@
+ 	return 0;
+ }
+ 
++#ifdef TCA_CBQ_MAX
+ static void print_rate(char *buf, int len, uint32_t rate)
+ {
+ 	double tmp = (double)rate*8;
+@@ -196,6 +197,7 @@
+ 			snprintf(buf, len, "%.0fbit",  tmp);
+ 	}
+ }
++#endif
+ 
+ #if 0
+ /* This is "pfifo_fast".  */
+@@ -231,6 +233,7 @@
+ 	return 0;
+ }
+ #endif
++#ifdef TCA_CBQ_MAX
+ static int cbq_print_opt(struct rtattr *opt)
+ {
+ 	struct rtattr *tb[TCA_CBQ_MAX+1];
+@@ -322,6 +325,7 @@
+  done:
+ 	return 0;
+ }
++#endif
+ 
+ static FAST_FUNC int print_qdisc(
+ 		const struct sockaddr_nl *who UNUSED_PARAM,
+@@ -372,8 +376,10 @@
+ 		int qqq = index_in_strings(_q_, name);
+ 		if (qqq == 0) { /* pfifo_fast aka prio */
+ 			prio_print_opt(tb[TCA_OPTIONS]);
++#ifdef TCA_CBQ_MAX
+ 		} else if (qqq == 1) { /* class based queuing */
+ 			cbq_print_opt(tb[TCA_OPTIONS]);
++#endif
+ 		} else {
+ 			/* don't know how to print options for this qdisc */
+ 			printf("(options for %s)", name);
+@@ -442,9 +448,11 @@
+ 		int qqq = index_in_strings(_q_, name);
+ 		if (qqq == 0) { /* pfifo_fast aka prio */
+ 			/* nothing. */ /*prio_print_opt(tb[TCA_OPTIONS]);*/
++#ifdef TCA_CBQ_MAX
+ 		} else if (qqq == 1) { /* class based queuing */
+ 			/* cbq_print_copt() is identical to cbq_print_opt(). */
+ 			cbq_print_opt(tb[TCA_OPTIONS]);
++#endif
+ 		} else {
+ 			/* don't know how to print options for this class */
+ 			printf("(options for %s)", name);
