@@ -79,7 +79,7 @@
 	status = "okay";
 };
 
-&spi {
+&spi0 {
 	flash@0 {
 		compatible = "spi-nand";
 		reg = <0>;

@@ -344,7 +344,7 @@
 	openwrt,netdev-name = "pon0";
 };
 
-&usb {
+&usb0 {
 	/* The populated connector uses USB2; there is no USB3 PHY lane. */
 	mediatek,u3p-dis-msk = <0x1>;
 	status = "okay";
@@ -359,7 +359,11 @@
 	econet,en751221-port0-quirks;
 };
 
-&slot0 {
+&pcie1 {
+	status = "okay";
+};
+
+&pcie0_slot0 {
 	wifi@0,0 {
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
@@ -395,11 +399,7 @@
 	};
 };
 
-&pcie1 {
-	status = "okay";
-};
-
-&slot1 {
+&pcie1_slot1 {
 	wifi@0,0 {
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;

@@ -113,7 +113,7 @@ model = "TP-Link xc220 g3v";
 	};
 };
 
-&spi {
+&spi0 {
 	flash@0 {
 		reg = <0>;
 		compatible = "jedec,spi-nor";
@@ -202,7 +202,6 @@ model = "TP-Link xc220 g3v";
 	};
 };
 
-/* Needs fix mt76 system crash */
 &pcie0 {
 	status = "okay";
 };
@@ -211,25 +210,22 @@ model = "TP-Link xc220 g3v";
 	status = "okay";
 };
 
-&slot0 {
-	status = "okay";
-
+/* 2,4 GHz: MT7592/MT7603 */
+&pcie0_slot0 {
 	wifi@0,0 {
-		/* 2,4 GHz: MT7592/MT7603 */
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
 
 		nvmem-cells = <&macaddr 1>, <&eeprom2_4>;
 		nvmem-cell-names = "mac-address", "eeprom";
 		ieee80211-freq-limit = <2400000 2500000>;
+		mediatek,eeprom-mode;
 	};
 };
 
-&slot1 {
-	status = "okay";
-
+/* Dual-band/5 GHz: MT7663 */
+&pcie1_slot1 {
 	wifi@0,0 {
-		/* Dual-band/5 GHz: MT7663 */
 		compatible = "mediatek,mt76";
 		reg = <0x0000 0 0 0 0>;
 

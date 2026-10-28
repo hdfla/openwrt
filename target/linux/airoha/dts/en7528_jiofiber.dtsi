@@ -54,7 +54,7 @@
 	};
 };
 
-&usb {
+&usb0 {
 	status = "okay";
 	vbus-supply = <&reg_usb1_vbus>;
 };
@@ -67,7 +67,7 @@
 	status = "okay";
 };
 
-&slot0 {
+&pcie0_slot0 {
 	status = "okay";
 
 	wifi@0,0 {
@@ -79,7 +79,7 @@
 	};
 };
 
-&slot1 {
+&pcie1_slot1 {
 	status = "okay";
 
 	wifi@0,0 {
@@ -125,7 +125,7 @@
 	status = "okay";
 };
 
-&spi {
+&spi0 {
 	flash@0 {
 		compatible = "spi-nand";
 		reg = <0>;

@@ -167,7 +167,12 @@
 &pcie0 {
 	status = "okay";
 };
-&slot0 {
+
+&pcie1 {
+	status = "okay";
+};
+
+&pcie0_slot0 {
 	wifi@0,0 {
 		/* MT7592 */
 		compatible = "mediatek,mt76";
@@ -176,10 +181,8 @@
 		nvmem-cell-names = "eeprom", "mac-address";
 	};
 };
-&pcie1 {
-	status = "okay";
-};
-&slot1 {
+
+&pcie1_slot1 {
 	wifi@0,0 {
 		/* MT7613BE */
 		compatible = "mediatek,mt76";

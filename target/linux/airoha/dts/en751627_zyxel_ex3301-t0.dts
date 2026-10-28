@@ -107,7 +107,13 @@
 	status = "okay";
 };
 
-&slot0 {
+&pcie1 {
+	status = "okay";
+
+	/* Slot 1 is a second link to the same wifi chip */
+};
+
+&pcie0_slot0 {
 	status = "okay";
 
 	wifi@0,0 {
@@ -116,10 +122,4 @@
 		mediatek,mtd-eeprom = <&factory 0x0000>;
 		big-endian;
 	};
-};
-
-&pcie1 {
-	status = "okay";
-
-	/* Slot 1 is a second link to the same wifi chip */
 };
