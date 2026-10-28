@@ -204,11 +204,11 @@ model = "TP-Link xc220 g3v";
 
 /* Needs fix mt76 system crash */
 &pcie0 {
-	status = "disabled";
+	status = "okay";
 };
 
 &pcie1 {
-	status = "disabled";
+	status = "okay";
 };
 
 &slot0 {
